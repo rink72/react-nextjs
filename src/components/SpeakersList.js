@@ -15,6 +15,24 @@ function SpeakersList() {
         return speaker.sessions.find((session) => { return session.eventYear === yearFilter })
     }
 
+    function speakerInQuery(speaker) {
+        return (
+            speaker.first.toLowerCase().includes(searchQuery) ||
+            speaker.last.toLowerCase().includes(searchQuery)
+        )
+    }
+
+    function getSpeakerCardJSX(speaker) {
+        return (
+            <SpeakerCard
+                key={speaker.id}
+                speaker={speaker}
+                showSessions={showSessions}
+                onFavoriteToggle={(completeCallback) => { updateRecord({ ...speaker, favorite: !speaker.favorite }, completeCallback) }}
+            />
+        )
+    }
+
     const {
         data: speakersData,
         requestStatus,
@@ -34,16 +52,10 @@ function SpeakersList() {
         <div className="container speakers-list">
             <ReactPlaceHolder className="speakerslist-placeholder" type="media" rows={15} ready={requestStatus === REQUEST_STATUS.SUCCESS}>
                 <div className="row">
-                    {speakersData.filter(speakerHasSessions).map((speaker) => {
-                        return (
-                            <SpeakerCard
-                                key={speaker.id}
-                                speaker={speaker}
-                                showSessions={showSessions}
-                                onFavoriteToggle={(completeCallback) => { updateRecord({ ...speaker, favorite: !speaker.favorite }, completeCallback) }}
-                            />
-                        )
-                    })}
+                    {speakersData
+                        .filter(speakerHasSessions)
+                        .filter(speakerInQuery)
+                        .map(getSpeakerCardJSX)}
                 </div>
             </ReactPlaceHolder>
         </div>
