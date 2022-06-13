@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import ReactPlaceHolder from 'react-placeholder'
 
 import SpeakerCard from "./SpeakerCard"
+import SpeakerAdd from './SpeakerAdd'
 import { SpeakerFilterContext } from '../contexts/SpeakerFilterContext'
 import useRequestDelay, { REQUEST_STATUS } from '../hooks/useRequestDelay'
 
@@ -28,7 +29,9 @@ function SpeakersList() {
                 key={speaker.id}
                 speaker={speaker}
                 showSessions={showSessions}
-                onFavoriteToggle={(completeCallback) => { updateRecord({ ...speaker, favorite: !speaker.favorite }, completeCallback) }}
+                updateRecord={updateRecord}
+                insertRecord={insertRecord}
+                deleteRecord={deleteRecord}
             />
         )
     }
@@ -37,7 +40,9 @@ function SpeakersList() {
         data: speakersData,
         requestStatus,
         error,
-        updateRecord
+        updateRecord,
+        insertRecord,
+        deleteRecord
     } = useRequestDelay(2000, data)
 
     if (requestStatus === REQUEST_STATUS.FAILURE) {
@@ -51,6 +56,7 @@ function SpeakersList() {
     return (
         <div className="container speakers-list">
             <ReactPlaceHolder className="speakerslist-placeholder" type="media" rows={15} ready={requestStatus === REQUEST_STATUS.SUCCESS}>
+                <SpeakerAdd eventYear={yearFilter} insertRecord={insertRecord} />
                 <div className="row">
                     {speakersData
                         .filter(speakerHasSessions)

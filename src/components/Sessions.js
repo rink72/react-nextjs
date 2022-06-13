@@ -3,9 +3,11 @@ import { useContext } from 'react'
 import Session from "./Session"
 
 import { SpeakerFilterContext } from "../contexts/SpeakerFilterContext"
+import { SpeakerContext } from "../contexts/SpeakerContext"
 
-function Sessions({ sessions }) {
+function Sessions() {
     const { yearFilter } = useContext(SpeakerFilterContext)
+    const { speaker } = useContext(SpeakerContext)
 
     function getSessionsForYear(session) {
         return session.eventYear === yearFilter
@@ -21,7 +23,7 @@ function Sessions({ sessions }) {
 
     return (
         <div className="sessionBox card h-250">
-            {sessions.filter(getSessionsForYear).map(getSessionJSX)}
+            {speaker.sessions.filter(getSessionsForYear).map(getSessionJSX)}
         </div>
     )
 }

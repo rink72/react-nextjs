@@ -1,26 +1,32 @@
+import { useContext } from "react"
+
+import { SpeakerContext } from "../contexts/SpeakerContext"
+
 import SpeakerFavourite from "./SpeakerFavourite"
 
-function SpeakerInfo({ first, last, bio, company, twitterHandle, favorite, onFavoriteToggle }) {
+function SpeakerInfo() {
+    const { speaker } = useContext(SpeakerContext)
+
     return (
         <div className="speaker-info">
             <div className="d-flex justify-content-between mb-3">
                 <h3 className="text-truncate w-200">
-                    {first} {last}
+                    {speaker.first} {speaker.last}
                 </h3>
             </div>
-            <SpeakerFavourite favorite={favorite} onFavoriteToggle={onFavoriteToggle} />
+            <SpeakerFavourite />
             <div>
                 <p className="card-description">
-                    {bio}
+                    {speaker.bio}
                 </p>
                 <div className="social d-flex flex-row mt-4">
                     <div className="company">
                         <h5>Company</h5>
-                        <h6>{company}</h6>
+                        <h6>{speaker.company}</h6>
                     </div>
                     <div className="twitter">
                         <h5>Twitter</h5>
-                        <h6>{twitterHandle}</h6>
+                        <h6>{speaker.twitterHandle}</h6>
                     </div>
                 </div>
             </div>

@@ -29,34 +29,54 @@ function useRequestDelay(delayTime, initialData = []) {
         delayFunc()
     }, [])
 
-    function updateRecord(recordUpdated, completeCallback) {
-        const originalRecords = data
-        const newRecords = data.map(function (rec) { return rec.id === recordUpdated.id ? recordUpdated : rec })
-
-        async function delayFunction() {
-            try {
-                setData(newRecords)
-                await delay(delayTime)
-            }
-            catch (e) {
-                setData(originalRecords)
-                console.log("Error inside delayFunction", error)
-            }
-            finally {
-                if (completeCallback) {
-                    completeCallback()
-                }
+    async function delayFunction(originalRecords, newRecords, completeCallback = null) {
+        try {
+            setData(newRecords)
+            await delay(delayTime)
+        }
+        catch (e) {
+            setData(originalRecords)
+            console.log("Error inside delayFunction", error)
+        }
+        finally {
+            if (completeCallback) {
+                completeCallback()
             }
         }
+    }
 
-        delayFunction()
+    function updateRecord(record, completeCallback) {
+        const originalRecords = data
+        const newRecords = data.map(function (rec) { return rec.id === record.id ? record : rec })
+
+        delayFunction(originalRecords, newRecords, completeCallback)
+    }
+
+    function insertRecord(record, completeCallback) {
+        const originalRecords = data
+        const newRecords = [record, ...originalRecords]
+
+        delayFunction(originalRecords, newRecords, completeCallback)
+    }
+
+    function deleteRecord(record, completeCallback) {
+        const originalRecords = data
+        const newRecords = originalRecords.filter(filterRemovedRecord)
+
+        function filterRemovedRecord(removeRecord) {
+            return removeRecord.id != record.id
+        }
+
+        delayFunction(originalRecords, newRecords, completeCallback)
     }
 
     return {
         data,
         requestStatus,
         error,
-        updateRecord
+        updateRecord,
+        insertRecord,
+        deleteRecord
     }
 }
 
