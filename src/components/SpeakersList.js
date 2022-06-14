@@ -4,7 +4,7 @@ import ReactPlaceHolder from 'react-placeholder'
 import SpeakerCard from "./SpeakerCard"
 import SpeakerAdd from './SpeakerAdd'
 import { SpeakerFilterContext } from '../contexts/SpeakerFilterContext'
-import useRequestDelay, { REQUEST_STATUS } from '../hooks/useRequestDelay'
+import useRequestRest, { REQUEST_STATUS } from '../hooks/useRequestRest'
 
 import { data } from "../SpeakerData"
 
@@ -43,7 +43,7 @@ function SpeakersList() {
         updateRecord,
         insertRecord,
         deleteRecord
-    } = useRequestDelay(2000, data)
+    } = useRequestRest()
 
     if (requestStatus === REQUEST_STATUS.FAILURE) {
         return (
