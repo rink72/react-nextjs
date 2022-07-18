@@ -291,7 +291,7 @@
       "company": "Eventuate, Inc",
       "bio": "Founder of Eventuate, Author of POJOs in Action, creator of the original Cloud Foundry",
       "twitterHandle": "crichardson",
-      "favorite": false,
+      "favorite": true,
       "sessions": [
         {
           "id": "1011",
